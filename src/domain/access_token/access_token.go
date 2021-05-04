@@ -18,8 +18,5 @@ func GetNewAccessToken() AccessToken {
 }
 
 func (accessToken AccessToken) IsExpired() bool {
-	now := time.Now().UTC()
-	expirationTime := time.Unix(accessToken.Expires, 0)
-
-	return expirationTime.Before(now)
+	return time.Unix(accessToken.Expires, 0).Before(time.Now().UTC())
 }
