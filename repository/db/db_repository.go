@@ -16,6 +16,6 @@ type DbRepository interface {
 type dbRepository struct {
 }
 
-func (db *dbRepository) GetById(str string) (*access_token.AccessToken, *errors.RESTErr) {
+func (db *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.RESTErr) {
 	return nil, nil
 }

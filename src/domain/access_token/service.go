@@ -22,6 +22,6 @@ func New(repo Repository) Service {
 	}
 }
 
-func (s *service) GetById(str string) (*AccessToken, *errors.RESTErr) {
+func (s *service) GetById(id string) (*AccessToken, *errors.RESTErr) {
 	return nil, nil
 }
