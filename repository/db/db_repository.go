@@ -5,7 +5,7 @@ import (
 	"github.com/aditya43/golang-bookstore_oauth-api/utils/errors"
 )
 
-func New() DbRepository {
+func NewRepository() DbRepository {
 	return &dbRepository{}
 }
 
@@ -17,5 +17,5 @@ type dbRepository struct {
 }
 
 func (db *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.RESTErr) {
-	return nil, nil
+	return nil, errors.InternalServerErr("Database connection not implemented yet..")
 }
