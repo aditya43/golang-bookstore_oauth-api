@@ -14,6 +14,7 @@ func StartApplication() {
 	atHandler := http.NewHandler(atService)
 
 	router.GET("/oauth/access_token/:access_token_id", atHandler.GetById)
+	router.POST("/oauth/access_token", atHandler.Create)
 
 	if err := router.Run(":8080"); err != nil {
 		panic(err)
