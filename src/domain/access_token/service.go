@@ -3,7 +3,7 @@ package access_token
 import (
 	"strings"
 
-	"github.com/aditya43/golang-bookstore_oauth-api/utils/errors"
+	"github.com/aditya43/golang-bookstore_oauth-api/src/utils/errors"
 )
 
 type Repository interface {
