@@ -31,11 +31,23 @@ Open-sourced software licensed under the [MIT license](http://opensource.org/lic
     # Start cqlsh
     cqlsh
     ```
-- In `cqlsh` shell, type following to create `keyspace`
+- In `cqlsh` shell, type following to create `keyspace` and `oauth` table:
     ```sh
     # List all keyspaces
     describe keyspaces;
 
     # Create new keyspace called "oauth" with single replica
     CREATE KEYSPACE oauth WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+    # Use "oauth" keyspace
+    USE oauth;
+
+    # Create "access_tokens" table
+    CREATE TABLE access_tokens( access_token VARCHAR PRIMARY KEY, user_id BIGINT, client_id BIGINT, expires BIGINT);
+
+    # Describe "access_tokens" table
+    describe access_tokens;
+
+    # Select operation on "access_tokens" table
+    SELECT * FROM access_tokens WHERE access_token='adi';
     ```
