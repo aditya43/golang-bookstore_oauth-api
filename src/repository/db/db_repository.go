@@ -6,7 +6,10 @@ import (
 	"github.com/aditya43/golang-bookstore_oauth-api/src/utils/errors"
 )
 
-const queryGetAccessToken = "SELECT access_token, user_id, client_id, expires FROM access_tokens WHERE access_token=?;"
+const (
+	queryGetAccessToken    = "SELECT access_token, user_id, client_id, expires FROM access_tokens WHERE access_token=?;"
+	queryCreateAccessToken = "INSERT INTO access_tokens (access_token, user_id, client_id, expires) VALUES (?, ?, ?, ?);"
+)
 
 func NewRepository() DbRepository {
 	return &dbRepository{}
@@ -14,6 +17,7 @@ func NewRepository() DbRepository {
 
 type DbRepository interface {
 	GetById(string) (*access_token.AccessToken, *errors.RESTErr)
+	Create(access_token.AccessToken) *errors.RESTErr
 }
 
 type dbRepository struct {
@@ -37,4 +41,23 @@ func (db *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.R
 	}
 
 	return &res, nil
+}
+
+func (db *dbRepository) Create(at access_token.AccessToken) *errors.RESTErr {
+	session, err := cassandra.GetSession()
+	if err != nil {
+		return errors.InternalServerErr(err.Error())
+	}
+	defer session.Close()
+
+	if err := session.Query(queryCreateAccessToken,
+		at.AccessToken,
+		at.UserId,
+		at.ClientId,
+		at.Expires,
+	).Exec(); err != nil {
+		return errors.InternalServerErr(err.Error())
+	}
+
+	return nil
 }
