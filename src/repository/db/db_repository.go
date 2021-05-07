@@ -6,6 +6,8 @@ import (
 	"github.com/aditya43/golang-bookstore_oauth-api/src/utils/errors"
 )
 
+const queryGetAccessToken = "SELECT access_token, user_id, client_id, expires FROM access_tokens WHERE access_token=?;"
+
 func NewRepository() DbRepository {
 	return &dbRepository{}
 }
@@ -20,8 +22,19 @@ type dbRepository struct {
 func (db *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.RESTErr) {
 	session, err := cassandra.GetSession()
 	if err != nil {
-		panic(err)
+		return nil, errors.InternalServerErr(err.Error())
 	}
 	defer session.Close()
-	return nil, errors.InternalServerErr("Database connection not implemented yet..")
+
+	var res access_token.AccessToken
+	if err := session.Query(queryGetAccessToken, id).Scan(
+		&res.AccessToken,
+		&res.UserId,
+		&res.ClientId,
+		&res.Expires,
+	); err != nil {
+		return nil, errors.InternalServerErr(err.Error())
+	}
+
+	return &res, nil
 }
